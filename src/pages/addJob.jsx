@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ArrowLeft, Loader2 } from "lucide-react";
+
 const api = process.env.REACT_APP_API;
 function AddJob() {
   const navigate = useNavigate();
@@ -15,12 +16,18 @@ function AddJob() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const isAuthenticated = localStorage.getItem("token");
+  // const isAuthenticated = localStorage.getItem("token");
 
-  if (!isAuthenticated) {
-    navigate("/login");
-    return null;
-  }
+  // if (!isAuthenticated) {
+  //   navigate("/login");
+  //   return null;
+  // }
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/login");
+    }
+  }, [navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -50,6 +57,9 @@ function AddJob() {
       setIsLoading(false);
     }
   };
+  if (!localStorage.getItem("token")) {
+    return null; // or you could return a loading spinner
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">

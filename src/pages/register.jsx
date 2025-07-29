@@ -2,14 +2,14 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
-
+const api = process.env.REACT_APP_API;
 function Register() {
   const [form, setForm] = useState({
     name: "",
     email: "",
     phone: "",
     password: "",
-    type: "user",
+    type: "employee",
   });
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -27,10 +27,16 @@ function Register() {
     setError("");
 
     try {
-      await axios.post("http://localhost:5000/api/auth/register", form);
-      navigate("/login", {
-        state: { registrationSuccess: true },
+      const res = await axios.post(`${api}/api/register`, {
+        name: form.name,
+        email: form.email,
+        phone: form.phone,
+        password: form.password,
+        type: form.type,
       });
+      localStorage.setItem("token", res.data.token);
+
+      navigate("/");
     } catch (err) {
       setError(
         err.response?.data?.message || "Registration failed. Please try again."
@@ -178,8 +184,8 @@ function Register() {
                 onChange={handleChange}
                 className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
               >
-                <option value="user">Job Seeker</option>
-                <option value="admin">Employer/Admin</option>
+                <option value="employee">Job Seeker</option>
+                <option value="employer">Employer/Admin</option>
               </select>
             </div>
 
