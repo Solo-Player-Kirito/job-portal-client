@@ -136,7 +136,7 @@ function Login() {
 
               <div className="text-sm">
                 <Link
-                  to="/forgot-password"
+                  to="/register"
                   className="font-medium text-blue-600 hover:text-blue-500"
                 >
                   Forgot your password?
